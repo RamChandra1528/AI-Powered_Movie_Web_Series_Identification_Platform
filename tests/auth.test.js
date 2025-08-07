@@ -3,6 +3,16 @@ const app = require('../server/index');
 const { db } = require('../server/config/database');
 
 describe('Authentication Endpoints', () => {
+  beforeEach(() => {
+    // Create test user for login tests
+    const testUser = global.testUtils.createTestUser({
+      email: 'test@example.com',
+      password: '$2a$12$rOvHPGkwxaXGwxkOVHMoUeQs7QGWqNVOa8T5fKMxEQGwxaXGwxkOV' // password: test123
+    });
+    const { db } = require('../server/config/database');
+    db.createUser(testUser);
+  });
+
   describe('POST /api/auth/register', () => {
     it('should register a new user successfully', async () => {
       const userData = {

@@ -8,24 +8,8 @@ process.env.PORT = '5001';
 
 // Clean up database before each test
 beforeEach(() => {
-  // Reset test data
-  const testUsers = [
-    {
-      id: 'test-user-1',
-      name: 'Test User',
-      email: 'test@example.com',
-      password: '$2a$12$rOvHPGkwxaXGwxkOVHMoUeQs7QGWqNVOa8T5fKMxEQGwxaXGwxkOV', // password: test123
-      role: 'user',
-      preferences: {
-        favoriteGenres: ['Action'],
-        preferredLanguages: ['English']
-      },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    }
-  ];
-
-  db.saveUsers(testUsers);
+  // Clean database for each test
+  db.saveUsers([]);
   db.saveMovies([]);
   db.writeFile(db.searchHistoryFile, []);
 });

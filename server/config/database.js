@@ -146,23 +146,8 @@ const db = new Database();
 const connectDB = () => {
   console.log('📁 File-based database initialized');
   
-  // Create sample data if empty
-  const users = db.getUsers();
-  if (users.length === 0) {
-    console.log('🌱 Seeding sample data...');
-    
-    // Create sample user
-    db.createUser({
-      name: 'Demo User',
-      email: 'demo@cineai.com',
-      password: '$2a$10$rOvHPGkwxaXGwxkOVHMoUeQs7QGWqNVOa8T5fKMxEQGwxaXGwxkOV', // password: demo123
-      role: 'user',
-      preferences: {
-        favoriteGenres: ['Action', 'Sci-Fi', 'Drama'],
-        preferredLanguages: ['English', 'Spanish']
-      }
-    });
-  }
+  // Database initialized - no sample data
+  console.log('✅ Database ready for production use');
 };
 
 module.exports = { db, connectDB };

@@ -62,8 +62,7 @@ A production-ready, full-stack web application that uses advanced AI to identify
 ### 1. Clone and Install
 
 ```bash
-git clone <repository-url>
-cd cineai-platform
+# Install dependencies
 npm install
 ```
 
@@ -73,24 +72,15 @@ npm install
 cp .env.example .env
 ```
 
-Edit `.env` with your configuration:
+**IMPORTANT**: Edit `.env` with your AI API keys (required for functionality):
 
 ```env
-# Server Configuration
-NODE_ENV=development
-PORT=5000
-
-# JWT Configuration
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-JWT_EXPIRE=7d
-
 # AI Provider API Keys
 OPENAI_API_KEY=sk-your-openai-api-key-here
 GEMINI_API_KEY=your-gemini-api-key-here
-
-# Frontend URL (for CORS)
-FRONTEND_URL=http://localhost:5173
 ```
+
+**⚠️ Without AI API keys, the application will not identify any content.**
 
 ### 3. Development Mode
 
@@ -109,6 +99,14 @@ npm run dev         # Frontend on port 5173
 - **Backend API**: http://localhost:5000
 - **API Documentation**: http://localhost:5000/api-docs
 - **Health Check**: http://localhost:5000/health
+
+### 5. Configure AI Providers
+
+1. Click "AI Settings" in the application header
+2. Enter your OpenAI and/or Gemini API keys
+3. Test the connection
+4. Select your preferred provider
+5. Start identifying movies and series!
 
 ## 🐳 Docker Deployment
 

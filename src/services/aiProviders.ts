@@ -214,34 +214,18 @@ class GeminiProvider implements AIProvider {
   }
 
   private parseGeminiResponse(text: string): MovieResult[] {
-    // Parse Gemini's response and convert to our format
-    // This is a simplified parser - in production, you'd want more robust parsing
     try {
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
         return parsed.results || [parsed];
       }
+      
+      // If no JSON found, throw error instead of returning dummy data
+      throw new Error('No valid JSON response from Gemini');
     } catch (e) {
-      // Fallback parsing logic
+      throw new Error(`Failed to parse Gemini response: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
-    
-    return [{
-      id: Math.random().toString(36).substr(2, 9),
-      title: 'Content Identified',
-      year: 2023,
-      type: 'movie',
-      genre: ['Unknown'],
-      rating: 7.0,
-      duration: '120 min',
-      description: text.substring(0, 200) + '...',
-      poster: 'https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg?auto=compress&cs=tinysrgb&w=400',
-      backdrop: 'https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg?auto=compress&cs=tinysrgb&w=800',
-      cast: ['Unknown'],
-      director: 'Unknown',
-      confidence: 75,
-      platforms: []
-    }];
   }
 }
 

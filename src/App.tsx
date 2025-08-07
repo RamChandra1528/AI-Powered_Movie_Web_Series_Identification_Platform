@@ -343,10 +343,10 @@ function App() {
               <Brain className="text-white" size={32} />
             </div>
             <h3 className="text-xl font-semibold text-gray-400 mb-2">
-              AI Ready for Content Discovery
+              Configure AI to Start Identifying Content
             </h3>
             <p className="text-gray-500 max-w-md mx-auto">
-              Configure your AI provider in settings, then use any search method to identify content with advanced AI
+              Click "AI Settings" to configure OpenAI or Gemini API keys, then start identifying movies and series with real AI analysis
             </p>
           </div>
         )}

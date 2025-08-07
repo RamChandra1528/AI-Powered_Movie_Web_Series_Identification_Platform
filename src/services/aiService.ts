@@ -83,34 +83,13 @@ class AIService {
   }
 
   private getFallbackResponse(input: AIInput): AIResponse {
-    // Fallback response when no AI provider is available
-    const mockResults: MovieResult[] = [
-      {
-        id: '1',
-        title: 'The Matrix',
-        year: 1999,
-        type: 'movie',
-        genre: ['Sci-Fi', 'Action'],
-        rating: 8.7,
-        duration: '136 min',
-        description: 'A computer programmer discovers that reality as he knows it is a simulation controlled by machines.',
-        poster: 'https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg?auto=compress&cs=tinysrgb&w=400',
-        backdrop: 'https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg?auto=compress&cs=tinysrgb&w=800',
-        cast: ['Keanu Reeves', 'Laurence Fishburne', 'Carrie-Anne Moss'],
-        director: 'The Wachowskis',
-        confidence: 85,
-        platforms: [
-          { name: 'Netflix', logo: '🎬', available: true, subscription: true, link: '#' },
-          { name: 'Amazon Prime', logo: '📺', available: true, subscription: true, link: '#' }
-        ]
-      }
-    ];
-
+    // No fallback data - require real AI providers
     return {
-      success: true,
-      results: mockResults,
-      processingTime: 1500,
-      confidence: 85
+      success: false,
+      results: [],
+      processingTime: 0,
+      confidence: 0,
+      error: 'No AI provider configured. Please configure OpenAI or Gemini API keys in settings.'
     };
   }
 
