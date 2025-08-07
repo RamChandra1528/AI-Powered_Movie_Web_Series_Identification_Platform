@@ -76,8 +76,8 @@ cp .env.example .env
 
 ```env
 # AI Provider API Keys
-OPENAI_API_KEY=sk-your-openai-api-key-here
-GEMINI_API_KEY=your-gemini-api-key-here
+VITE_OPENAI_API_KEY=sk-your-openai-api-key-here
+VITE_GEMINI_API_KEY=your-gemini-api-key-here
 ```
 
 **⚠️ Without AI API keys, the application will not identify any content.**
