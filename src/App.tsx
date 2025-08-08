@@ -343,10 +343,14 @@ function App() {
               <Brain className="text-white" size={32} />
             </div>
             <h3 className="text-xl font-semibold text-gray-400 mb-2">
-              Configure AI to Start Identifying Content
+              {aiService.getAvailableProviders().length === 0 
+                ? "Configure AI API Keys to Start" 
+                : "Ready to Identify Content"}
             </h3>
             <p className="text-gray-500 max-w-md mx-auto">
-              Click "AI Settings" to configure OpenAI or Gemini API keys, then start identifying movies and series with real AI analysis
+              {aiService.getAvailableProviders().length === 0 
+                ? "Click 'AI Settings' to add your OpenAI or Gemini API keys. Get keys from platform.openai.com or makersuite.google.com"
+                : "Upload an image, video, or enter text to identify movies and series using AI"}
             </p>
           </div>
         )}

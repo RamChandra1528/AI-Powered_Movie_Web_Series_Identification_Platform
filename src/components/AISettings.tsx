@@ -22,9 +22,10 @@ export const AISettings: React.FC<AISettingsProps> = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const handleSaveApiKey = (provider: string, apiKey: string) => {
-    if (apiKey.trim()) {
-      aiService.setApiKey(provider, apiKey);
+    if (apiKey.trim() && aiService.setApiKey(provider, apiKey)) {
       setConnectionStatus(prev => ({ ...prev, [provider]: 'success' }));
+    } else {
+      setConnectionStatus(prev => ({ ...prev, [provider]: 'error' }));
     }
   };
 

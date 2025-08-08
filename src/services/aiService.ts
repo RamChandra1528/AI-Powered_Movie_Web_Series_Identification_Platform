@@ -15,13 +15,30 @@ class AIService {
     const openaiKey = import.meta.env.VITE_OPENAI_API_KEY || localStorage.getItem('openai_api_key');
     const geminiKey = import.meta.env.VITE_GEMINI_API_KEY || localStorage.getItem('gemini_api_key');
 
-    if (openaiKey) {
+    if (openaiKey && this.isValidApiKey('openai', openaiKey)) {
       this.providers.set('openai', new OpenAIProvider(openaiKey));
     }
 
-    if (geminiKey) {
+    if (geminiKey && this.isValidApiKey('gemini', geminiKey)) {
       this.providers.set('gemini', new GeminiProvider(geminiKey));
     }
+  }
+
+  private isValidApiKey(provider: string, apiKey: string): boolean {
+    // Check for placeholder values and basic format validation
+    if (!apiKey || apiKey.includes('your_') || apiKey.includes('here') || apiKey.includes('***')) {
+      return false;
+    }
+
+    if (provider === 'openai') {
+      return apiKey.startsWith('sk-') && apiKey.length > 20;
+    }
+
+    if (provider === 'gemini') {
+      return apiKey.startsWith('AIza') && apiKey.length > 20;
+    }
+
+    return false;
   }
 
   setProvider(providerName: string) {
@@ -31,8 +48,12 @@ class AIService {
   }
 
   setApiKey(provider: string, apiKey: string) {
-    localStorage.setItem(`${provider}_api_key`, apiKey);
-    this.initializeProviders();
+    if (this.isValidApiKey(provider, apiKey)) {
+      localStorage.setItem(`${provider}_api_key`, apiKey);
+      this.initializeProviders();
+      return true;
+    }
+    return false;
   }
 
   async identifyContent(input: AIInput): Promise<AIResponse> {
