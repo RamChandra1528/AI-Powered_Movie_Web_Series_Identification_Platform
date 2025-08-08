@@ -245,7 +245,7 @@ class GeminiProvider {
     const startTime = Date.now();
     
     try {
-      const model = this.client.getGenerativeModel({ model: 'gemini-pro-vision' });
+      const model = this.client.getGenerativeModel({ model: 'gemini-1.0-pro-vision' });
       
       let prompt = this.buildPrompt(input);
       let parts = [prompt];
