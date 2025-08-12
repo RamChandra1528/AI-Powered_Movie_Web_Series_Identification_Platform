@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Search, Upload, Video, User, Star, Play, Clock, Calendar, Globe, Settings, Zap, Brain } from 'lucide-react';
+import { Search, Upload, Video, User, Star, Play, Clock, Calendar, Globe, Settings, Zap, Brain, ExternalLink } from 'lucide-react';
 import { AISettings } from './components/AISettings';
 import { aiService } from './services/aiService';
-import { MovieResult } from './types/ai';
+import { MovieResult, GoogleSearchResult } from './types/ai';
 
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<MovieResult[]>([]);
+  const [googleResults, setGoogleResults] = useState<GoogleSearchResult[]>([]);
   const [activeTab, setActiveTab] = useState<'text' | 'image' | 'video' | 'actor'>('text');
   const [isSearching, setIsSearching] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -32,6 +33,7 @@ function App() {
       
       if (response.success) {
         setSearchResults(response.results);
+        setGoogleResults(response.googleResults || []);
         setProcessingTime(response.processingTime);
         setAiProvider(aiService.getCurrentProvider());
       } else {
@@ -336,8 +338,53 @@ function App() {
           </div>
         )}
 
+        {/* Google Search Results */}
+        {googleResults.length > 0 && (
+          <div className="space-y-6 mt-12">
+            <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+              <Globe className="text-blue-400" size={28} />
+              Related Web Results ({googleResults.length} found)
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {googleResults.map((result, index) => (
+                <div key={index} className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/30 hover:border-blue-500/30 transition-all duration-300 hover:transform hover:scale-105">
+                  <div className="flex items-start gap-4">
+                    {result.thumbnail && (
+                      <img 
+                        src={result.thumbnail} 
+                        alt=""
+                        className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-white font-semibold text-sm mb-2 line-clamp-2">
+                        {result.title}
+                      </h4>
+                      <p className="text-gray-400 text-xs mb-2">
+                        {result.displayLink}
+                      </p>
+                      <p className="text-gray-300 text-xs line-clamp-3 mb-3">
+                        {result.snippet}
+                      </p>
+                      <a
+                        href={result.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs font-medium transition-colors"
+                      >
+                        Visit Site
+                        <ExternalLink size={12} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Empty State */}
-        {searchResults.length === 0 && !isSearching && (
+        {searchResults.length === 0 && googleResults.length === 0 && !isSearching && (
           <div className="text-center py-16">
             <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-6 opacity-50">
               <Brain className="text-white" size={32} />

@@ -10,6 +10,8 @@ interface AISettingsProps {
 export const AISettings: React.FC<AISettingsProps> = ({ isOpen, onClose }) => {
   const [openaiKey, setOpenaiKey] = useState('');
   const [geminiKey, setGeminiKey] = useState('');
+  const [googleSearchKey, setGoogleSearchKey] = useState('');
+  const [googleSearchEngineId, setGoogleSearchEngineId] = useState('');
   const [selectedProvider, setSelectedProvider] = useState('openai');
   const [isTestingConnection, setIsTestingConnection] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<{[key: string]: 'success' | 'error' | 'idle'}>({});
@@ -18,6 +20,8 @@ export const AISettings: React.FC<AISettingsProps> = ({ isOpen, onClose }) => {
     // Load saved API keys
     setOpenaiKey(localStorage.getItem('openai_api_key') || '');
     setGeminiKey(localStorage.getItem('gemini_api_key') || '');
+    setGoogleSearchKey(localStorage.getItem('google_search_api_key') || '');
+    setGoogleSearchEngineId(localStorage.getItem('google_search_engine_id') || '');
     setSelectedProvider(aiService.getCurrentProvider());
   }, [isOpen]);
 
@@ -26,6 +30,16 @@ export const AISettings: React.FC<AISettingsProps> = ({ isOpen, onClose }) => {
       setConnectionStatus(prev => ({ ...prev, [provider]: 'success' }));
     } else {
       setConnectionStatus(prev => ({ ...prev, [provider]: 'error' }));
+    }
+  };
+
+  const handleSaveGoogleSearch = () => {
+    if (googleSearchKey.trim() && googleSearchEngineId.trim()) {
+      const { googleSearchService } = require('../services/googleSearch');
+      googleSearchService.setCredentials(googleSearchKey, googleSearchEngineId);
+      setConnectionStatus(prev => ({ ...prev, google: 'success' }));
+    } else {
+      setConnectionStatus(prev => ({ ...prev, google: 'error' }));
     }
   };
 
@@ -205,6 +219,47 @@ export const AISettings: React.FC<AISettingsProps> = ({ isOpen, onClose }) => {
                 )}
               </div>
             </div>
+
+            {/* Google Search Configuration */}
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-gray-300">
+                Google Search Integration (Optional)
+              </label>
+              <div className="space-y-3">
+                <input
+                  type="password"
+                  value={googleSearchKey}
+                  onChange={(e) => setGoogleSearchKey(e.target.value)}
+                  placeholder="Google Search API Key"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                />
+                <input
+                  type="text"
+                  value={googleSearchEngineId}
+                  onChange={(e) => setGoogleSearchEngineId(e.target.value)}
+                  placeholder="Custom Search Engine ID"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                />
+                <button
+                  onClick={handleSaveGoogleSearch}
+                  className="w-full px-4 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors font-medium"
+                >
+                  Save Google Search Config
+                </button>
+              </div>
+              {connectionStatus.google && (
+                <div className={`flex items-center gap-2 text-sm ${
+                  connectionStatus.google === 'success' ? 'text-green-400' : 'text-red-400'
+                }`}>
+                  {connectionStatus.google === 'success' ? (
+                    <CheckCircle size={16} />
+                  ) : (
+                    <AlertCircle size={16} />
+                  )}
+                  {connectionStatus.google === 'success' ? 'Google Search configured' : 'Configuration failed'}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Instructions */}
@@ -213,6 +268,7 @@ export const AISettings: React.FC<AISettingsProps> = ({ isOpen, onClose }) => {
             <ul className="text-sm text-gray-300 space-y-1">
               <li>• <strong>OpenAI:</strong> Visit platform.openai.com → API Keys → Create new key</li>
               <li>• <strong>Google Gemini:</strong> Visit makersuite.google.com → Get API Key</li>
+              <li>• <strong>Google Search:</strong> Visit console.cloud.google.com → Enable Custom Search API → Create credentials</li>
               <li>• API keys are stored locally in your browser for security</li>
             </ul>
           </div>

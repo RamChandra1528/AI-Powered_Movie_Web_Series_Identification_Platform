@@ -12,9 +12,18 @@ export interface AIInput {
 export interface AIResponse {
   success: boolean;
   results: MovieResult[];
+  googleResults?: GoogleSearchResult[];
   processingTime: number;
   confidence: number;
   error?: string;
+}
+
+export interface GoogleSearchResult {
+  title: string;
+  link: string;
+  snippet: string;
+  displayLink: string;
+  thumbnail?: string;
 }
 
 export interface MovieResult {

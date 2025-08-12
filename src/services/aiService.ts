@@ -1,4 +1,5 @@
 import { OpenAIProvider, GeminiProvider } from './aiProviders';
+import { googleSearchService } from './googleSearch';
 import { AIInput, AIResponse, MovieResult } from '../types/ai';
 
 class AIService {
@@ -69,6 +70,13 @@ class AIService {
       // Enhance results with additional data
       if (response.success) {
         response.results = await this.enhanceResults(response.results);
+        
+        // Add Google search results if available
+        if (googleSearchService.isConfigured()) {
+          const searchQuery = input.type === 'text' ? input.content as string : 
+                            input.query || response.results[0]?.title || 'movie';
+          response.googleResults = await googleSearchService.searchMovies(searchQuery);
+        }
       }
       
       return response;
